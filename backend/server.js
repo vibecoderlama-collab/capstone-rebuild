@@ -10,6 +10,25 @@ const PORT = 3000;
 const server = http.createServer(app);
 const webSocetServer = new WebSocket.Server({ server });
 
+webSocetServer.on('connection', (ws) => {
+  // A new client has connected
+  console.log('Client connected');
+
+  webSocetServer.on('message', (message) => {
+    // Broadcast the message to all clients
+    webSocetServer.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message.toString());
+      }
+    });
+  });
+
+  webSocetServer.on('close', () => {
+    // A client has disconnected
+    console.log('Client disconnected');
+  });
+});
+
 server.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 })
