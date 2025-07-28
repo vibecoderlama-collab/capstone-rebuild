@@ -14,7 +14,8 @@ webSocetServer.on('connection', (ws) => {
   // A new client has connected
   console.log('Client connected');
 
-  webSocetServer.on('message', (message) => {
+  ws.on('message', (message) => {
+    console.log('Received message => %s', message);
     // Broadcast the message to all clients
     webSocetServer.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
@@ -23,7 +24,7 @@ webSocetServer.on('connection', (ws) => {
     });
   });
 
-  webSocetServer.on('close', () => {
+  ws.on('close', () => {
     // A client has disconnected
     console.log('Client disconnected');
   });
